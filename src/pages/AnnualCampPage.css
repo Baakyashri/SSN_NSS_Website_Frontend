@@ -1,0 +1,386 @@
+/* ===================================================
+   ANNUAL CAMP PAGE — AnnualCampPage.css
+   Extends existing camp styles with year dashboard UI
+=================================================== */
+
+/* Layout container */
+.camp-container {
+  display: flex;
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #cadef3, #9dc0f8);
+}
+
+/* ===== SIDEBAR ===== */
+.camp-sidebar {
+  width: 240px;
+  background: #003366;
+  color: white;
+  padding: 35px 20px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  box-shadow: 3px 0 15px rgba(0, 0, 0, 0.25);
+  border-top-right-radius: 16px;
+  border-bottom-right-radius: 16px;
+}
+
+/* Year badge in sidebar */
+.camp-year-badge {
+  background: linear-gradient(135deg, #005792, #6697e4);
+  color: white;
+  font-size: 1rem;
+  font-weight: 700;
+  text-align: center;
+  padding: 10px 14px;
+  border-radius: 10px;
+  margin-bottom: 22px;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 12px rgba(0, 87, 146, 0.4);
+}
+
+.camp-sidebar nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.camp-sidebar nav ul li {
+  margin-bottom: 10px;
+}
+
+.camp-sidebar nav ul li a {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 500;
+  display: block;
+  padding: 9px 14px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+}
+
+.camp-sidebar nav ul li a:hover {
+  background: linear-gradient(135deg, #005792, #6697e4);
+  color: #fff;
+  transform: translateX(5px);
+}
+
+/* ===== MAIN CONTENT ===== */
+.camp-content {
+  flex: 1;
+  padding: 50px;
+  background-color: #cadef3;
+  scroll-behavior: smooth;
+}
+
+.camp-content section {
+  margin-bottom: 60px;
+  background: #ffffff;
+  padding: 30px 35px;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.camp-content section:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.camp-content h2 {
+  margin-top: 0;
+  color: #002B5B;
+  font-size: 28px;
+  font-weight: 600;
+  border-left: 6px solid #005792;
+  padding-left: 12px;
+  margin-bottom: 18px;
+}
+
+.camp-content p {
+  color: #222;
+  line-height: 1.7;
+  font-size: 17px;
+}
+
+/* ===== OVERVIEW META CARDS ===== */
+.camp-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin: 20px 0 10px;
+}
+
+.camp-meta-card {
+  background: linear-gradient(135deg, #cadef3, #deeeff);
+  border-radius: 12px;
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border-left: 4px solid #005792;
+  transition: transform 0.25s ease;
+}
+
+.camp-meta-card:hover {
+  transform: translateY(-3px);
+}
+
+.camp-meta-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.camp-meta-card strong {
+  display: block;
+  color: #003366;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.camp-meta-card p {
+  margin: 0;
+  color: #002B5B;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+/* ===== UPCOMING BANNER ===== */
+.camp-upcoming-banner {
+  background: linear-gradient(135deg, #fffbeb, #fef3c7);
+  border-left: 5px solid #f59e0b;
+  border-radius: 10px;
+  padding: 16px 20px;
+  font-size: 1rem;
+  color: #92400e;
+  font-weight: 500;
+  margin: 14px 0;
+}
+
+/* ===== NO PHOTOS NOTE ===== */
+.camp-no-photos {
+  font-size: 0.9rem !important;
+  color: #888 !important;
+  background: #f8fafc;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-top: 12px;
+  border-left: 3px solid #cadef3;
+}
+
+.camp-no-photos code {
+  background: #e0eeff;
+  color: #003366;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+
+/* ===== GALLERY DASHBOARD ===== */
+
+/* Day filter tab strip */
+.camp-gallery-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.camp-gallery-tab {
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 2px solid #005792;
+  background: #ffffff;
+  color: #005792;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-family: inherit;
+}
+
+.camp-gallery-tab:hover {
+  background: #cadef3;
+}
+
+.camp-gallery-tab.active {
+  background: #003366;
+  color: #ffffff;
+  border-color: #003366;
+  box-shadow: 0 4px 12px rgba(0, 51, 102, 0.25);
+}
+
+/* Photo grid */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.camp-gallery-grid img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
+}
+
+.camp-gallery-grid img:hover {
+  transform: scale(1.04);
+  filter: brightness(1.08);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.22);
+}
+
+/* Day section gallery (smaller) */
+.gallery-grid:not(.camp-gallery-grid) img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.12);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
+}
+
+.gallery-grid:not(.camp-gallery-grid) img:hover {
+  transform: scale(1.05);
+  filter: brightness(1.1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+/* Empty gallery state */
+.camp-empty-gallery {
+  text-align: center;
+  padding: 48px 20px;
+  color: #888;
+}
+
+.camp-empty-gallery p {
+  margin: 10px 0 0;
+  font-size: 1rem !important;
+  color: #666 !important;
+}
+
+.camp-empty-gallery code {
+  background: #e0eeff;
+  color: #003366;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+
+/* ===== LIGHTBOX ===== */
+.camp-lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.88);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.camp-lightbox-content {
+  position: relative;
+  max-width: 90vw;
+  max-height: 88vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.camp-lightbox-img {
+  max-width: 100%;
+  max-height: 88vh;
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7);
+}
+
+.camp-lightbox-close {
+  position: absolute;
+  top: -40px;
+  right: -8px;
+  background: #ffffff;
+  color: #003366;
+  border: none;
+  border-radius: 50%;
+  font-size: 16px;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transition: background 0.2s ease;
+}
+
+.camp-lightbox-close:hover {
+  background: #cadef3;
+}
+
+/* ===== SCROLL BEHAVIOUR ===== */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+  .camp-meta-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .gallery-grid,
+  .camp-gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .camp-container {
+    flex-direction: column;
+  }
+
+  .camp-sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    box-shadow: none;
+    border-radius: 0;
+    margin-bottom: 0;
+  }
+
+  .camp-content {
+    padding: 25px;
+  }
+
+  .camp-meta-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .gallery-grid,
+  .camp-gallery-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .camp-meta-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .camp-gallery-tabs {
+    gap: 8px;
+  }
+
+  .camp-gallery-tab {
+    font-size: 0.82rem;
+    padding: 7px 14px;
+  }
+}

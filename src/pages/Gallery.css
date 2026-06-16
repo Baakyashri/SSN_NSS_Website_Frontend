@@ -1,0 +1,267 @@
+/* ============================================================
+   GALLERY PAGE — NSS SSN v2.0
+============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --primary:       #003366;
+  --primary-light: #005792;
+  --primary-pale:  #cadef3;
+  --accent:        #b30000;
+  --white:         #ffffff;
+  --off-white:     #f0f5fc;
+  --text-dark:     #1a2233;
+  --text-mid:      #3d5278;
+  --text-light:    #6b84a8;
+  --border:        #dce8f5;
+  --shadow-sm:     0 2px 8px rgba(0,51,102,0.08);
+  --shadow-md:     0 6px 24px rgba(0,51,102,0.12);
+  --shadow-lg:     0 16px 48px rgba(0,51,102,0.18);
+  --radius-sm:     8px;
+  --radius-md:     14px;
+  --radius-lg:     20px;
+  --transition:    all 0.26s cubic-bezier(0.4,0,0.2,1);
+}
+
+.gallery-wrapper {
+  background: var(--off-white);
+  min-height: 100vh;
+}
+
+.gallery-container {
+  padding: 40px;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.gallery-title {
+  text-align: center;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 800;
+  color: var(--primary);
+  margin-bottom: 36px;
+  letter-spacing: -0.02em;
+}
+
+/* ── Album Grid ── */
+.album-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 22px;
+}
+
+.album-card {
+  background: var(--white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.album-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary-pale);
+}
+
+.album-thumb img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.album-card:hover .album-thumb img {
+  transform: scale(1.05);
+}
+
+.empty-thumb {
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-light);
+  background: var(--off-white);
+  font-size: 2.5rem;
+}
+
+.album-name {
+  padding: 12px 14px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--primary);
+  letter-spacing: 0.01em;
+}
+
+/* ── Album View ── */
+.album-view { margin-top: 8px; }
+
+.album-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--white);
+  padding: 18px 22px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-sm);
+}
+
+.album-header h3 {
+  color: var(--primary);
+  font-weight: 700;
+  font-size: 1.15rem;
+}
+
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 18px;
+  border: none;
+  background: var(--primary);
+  color: #fff;
+  border-radius: var(--radius-sm);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700;
+  font-size: 0.86rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.back-btn:hover {
+  background: var(--primary-light);
+  transform: translateX(-3px);
+}
+
+/* ── Photo Grid ── */
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.photo-card {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--white);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+  transition: var(--transition);
+  cursor: pointer;
+}
+
+.photo-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-4px);
+}
+
+.photo-img-wrapper {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+
+.photo-img-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.photo-img-wrapper img:hover {
+  transform: scale(1.06);
+}
+
+/* ============================================================
+   MODAL — Improved design
+============================================================ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 10, 28, 0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+  animation: overlayIn 0.2s ease both;
+}
+
+@keyframes overlayIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.modal-content {
+  position: relative;
+  max-width: min(90vw, 1000px);
+  max-height: 88vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: modalPop 0.28s cubic-bezier(0.34,1.2,0.64,1) both;
+}
+
+@keyframes modalPop {
+  from { opacity: 0; transform: scale(0.9); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.modal-img {
+  max-width: 100%;
+  max-height: 85vh;
+  object-fit: contain;
+  border-radius: var(--radius-md);
+  box-shadow: 0 24px 80px rgba(0,0,0,0.7);
+  display: block;
+}
+
+.modal-close {
+  position: absolute;
+  top: -48px;
+  right: 0;
+  width: 36px;
+  height: 36px;
+  background: rgba(255,255,255,0.9);
+  color: var(--primary);
+  border: none;
+  border-radius: 50%;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  line-height: 1;
+}
+
+.modal-close:hover {
+  background: var(--accent);
+  color: white;
+  transform: scale(1.1) rotate(90deg);
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .gallery-container { padding: 24px 16px; }
+  .album-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 14px; }
+  .photo-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+  .modal-close { top: -44px; }
+}
+
+@media (max-width: 480px) {
+  .album-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .photo-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .album-header { flex-direction: column; gap: 12px; align-items: flex-start; }
+}

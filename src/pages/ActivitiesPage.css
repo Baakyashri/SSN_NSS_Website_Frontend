@@ -1,0 +1,343 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+/* ── Tokens ── */
+:root {
+  --primary:        #003366;
+  --primary-light:  #005792;
+  --primary-pale:   #cadef3;
+  --accent:         #b30000;
+  --white:          #ffffff;
+  --off-white:      #f0f5fc;
+  --text-dark:      #1a2233;
+  --text-mid:       #3d5278;
+  --text-light:     #6b84a8;
+  --border:         #dce8f5;
+  --shadow-sm:      0 2px 8px rgba(0,51,102,0.07);
+  --shadow-md:      0 8px 28px rgba(0,51,102,0.13);
+  --radius-sm:      6px;
+  --radius-md:      12px;
+  --radius-lg:      18px;
+  --transition:     all 0.24s cubic-bezier(0.4,0,0.2,1);
+  --font:           'Plus Jakarta Sans', sans-serif;
+}
+
+/* ── Base ── */
+.activities-container {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 48px 40px 64px;
+  font-family: var(--font);
+  background: var(--off-white);
+  min-height: 100vh;
+}
+
+/* ── Hero ── */
+.page-hero {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.page-hero h2 {
+  color: var(--primary);
+  font-size: clamp(1.75rem, 3.5vw, 2.4rem);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  margin: 0 0 10px;
+}
+
+.page-hero p {
+  color: var(--text-light);
+  font-size: 1rem;
+  margin: 0;
+}
+
+/* ── Grid — 1 wide column so cards expand horizontally ── */
+.activities-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+/* ── Card ── */
+.activity-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.activity-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary-pale);
+}
+
+/* ── Card Header ── */
+.activity-header {
+  background: linear-gradient(140deg, var(--primary) 0%, var(--primary-light) 100%);
+  padding: 20px 26px 22px;
+  color: var(--white);
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.activity-header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.status-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  padding: 4px 10px;
+  border-radius: 99px;
+  border: 1.5px solid rgba(255,255,255,0.35);
+  color: var(--white);
+  background: rgba(255,255,255,0.12);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.status-badge.status-upcoming {
+  background: rgba(255,255,255,0.22);
+  border-color: rgba(255,255,255,0.5);
+}
+
+.status-badge.status-ongoing {
+  background: rgba(0, 200, 120, 0.25);
+  border-color: rgba(0,255,160,0.4);
+}
+
+.activity-date {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.7);
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+.activity-header .activity-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.45;
+  margin: 0 0 14px;
+  color: #ffffff !important;
+  flex: 1;
+}
+
+.activity-location {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.7);
+  background: rgba(255,255,255,0.1);
+  padding: 4px 10px 4px 8px;
+  border-radius: 99px;
+  border: 1px solid rgba(255,255,255,0.15);
+  align-self: flex-start;
+}
+
+.location-icon {
+  font-size: 0.8rem;
+  line-height: 1;
+}
+
+/* ── Card Body ── */
+.activity-body {
+  padding: 20px 26px 24px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.activity-description {
+  color: var(--text-mid);
+  font-size: 0.9rem;
+  line-height: 1.75;
+  margin: 0 0 4px;
+}
+
+/* ── Sections (Photos / Reports) ── */
+.activity-section {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.section-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-light);
+  margin: 0 0 10px;
+}
+
+/* ── Photos ── */
+.photos-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.activity-photo {
+  width: 76px;
+  height: 76px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border);
+  display: block;
+  transition: var(--transition);
+  background: var(--off-white);
+  flex-shrink: 0;
+}
+
+.activity-photo:hover {
+  transform: scale(1.06);
+  border-color: var(--primary-light);
+  box-shadow: 0 4px 12px rgba(0,51,102,0.15);
+}
+
+/* ── Reports ── */
+.report-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.report-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 13px;
+  background: var(--off-white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  color: var(--primary-light);
+  font-size: 0.84rem;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.report-link:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--white);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.report-icon { font-size: 1rem; flex-shrink: 0; }
+
+.report-name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.report-download-icon {
+  font-size: 0.85rem;
+  font-weight: 800;
+  opacity: 0.55;
+  flex-shrink: 0;
+}
+
+.report-link:hover .report-download-icon { opacity: 1; }
+
+/* ── Empty State ── */
+.no-activities {
+  text-align: center;
+  padding: 80px 20px;
+  color: var(--text-light);
+}
+
+.no-activities-icon {
+  display: block;
+  font-size: 2.5rem;
+  margin-bottom: 16px;
+}
+
+.no-activities p { font-size: 1rem; margin: 0; }
+
+/* ── Skeleton Loader ── */
+.skeleton-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+.skeleton-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.skeleton-header {
+  height: 90px;
+  width: 100%;
+  background: linear-gradient(90deg, var(--primary-pale) 25%, #dceef8 50%, var(--primary-pale) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+}
+
+.skeleton-body {
+  flex: 1;
+  padding: 24px 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+}
+
+.skeleton-line {
+  height: 12px;
+  border-radius: 99px;
+  background: linear-gradient(90deg, var(--border) 25%, #eaf2fb 50%, var(--border) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+}
+
+.skeleton-line.wide   { width: 85%; }
+.skeleton-line        { width: 70%; }
+.skeleton-line.narrow { width: 45%; }
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .activities-container { padding: 32px 20px 48px; }
+}
+
+@media (max-width: 700px) {
+  .activities-container { padding: 24px 16px 40px; }
+  .page-hero { margin-bottom: 28px; }
+
+  .activity-header { padding: 18px 20px 20px; }
+}

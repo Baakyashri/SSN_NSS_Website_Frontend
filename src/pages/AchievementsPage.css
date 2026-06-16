@@ -1,0 +1,316 @@
+/* ============================================================
+   ACHIEVEMENTS PAGE — NSS SSN v2.0
+============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --primary:       #003366;
+  --primary-light: #005792;
+  --primary-pale:  #cadef3;
+  --accent:        #b30000;
+  --white:         #ffffff;
+  --off-white:     #f0f5fc;
+  --text-dark:     #1a2233;
+  --text-mid:      #3d5278;
+  --text-light:    #6b84a8;
+  --border:        #dce8f5;
+  --shadow-sm:     0 2px 8px rgba(0,51,102,0.08);
+  --shadow-md:     0 6px 24px rgba(0,51,102,0.12);
+  --shadow-lg:     0 16px 48px rgba(0,51,102,0.18);
+  --radius-sm:     8px;
+  --radius-md:     14px;
+  --radius-lg:     20px;
+  --transition:    all 0.26s cubic-bezier(0.4,0,0.2,1);
+}
+
+.achievements-wrapper {
+  background: var(--off-white);
+  min-height: 100vh;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* ── Hero ── */
+.achievements-hero {
+  min-height: 52vh;
+  background: linear-gradient(135deg, #001d40 0%, var(--primary) 60%, var(--primary-light) 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.achievements-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(100,180,255,0.1) 0%, transparent 70%);
+}
+
+.achievements-hero h1 {
+  position: relative;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 800;
+  color: white;
+  margin-bottom: 12px;
+  text-shadow: 0 2px 16px rgba(0,0,0,0.3);
+  letter-spacing: -0.02em;
+}
+
+.hero-subtitle {
+  position: relative;
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  color: #a8cef5;
+  font-weight: 400;
+}
+
+/* ── Sections ── */
+.achievements-wrapper section {
+  background: var(--white);
+  color: var(--text-dark);
+  margin: 24px 32px;
+  padding: 32px 36px;
+  border-radius: var(--radius-lg);
+  border-left: 5px solid var(--primary);
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+
+.achievements-wrapper section:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.achievements-intro {
+  background: linear-gradient(135deg, var(--primary-pale) 0%, #e4effc 100%) !important;
+  font-size: 1.05rem;
+  line-height: 1.8;
+}
+
+.achievements-intro strong {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* ── Achievement Header ── */
+.achievement-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.achievement-icon { font-size: 2.2rem; }
+
+.achievement-header h2 {
+  color: var(--primary);
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+/* ── Content with Image Layout ── */
+.achievement-content-with-image {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.achievement-content-with-image.reverse {
+  grid-template-columns: 1fr 1.2fr;
+}
+
+.achievement-content-with-image.reverse .achievement-text { order: 2; }
+.achievement-content-with-image.reverse .achievement-image { order: 1; }
+
+.achievement-image {
+  width: 100%;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+
+.achievement-image img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  transition: transform 0.4s ease;
+}
+
+.achievement-image:hover img { transform: scale(1.04); }
+
+/* ── Achievement Text ── */
+.achievement-text h3 {
+  color: var(--primary);
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin: 16px 0 10px;
+}
+
+.achievement-text h3:first-child { margin-top: 0; }
+
+.achievement-details {
+  background: var(--off-white);
+  padding: 14px 16px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 14px;
+  border-left: 4px solid var(--primary-light);
+}
+
+.achievement-details p {
+  margin: 6px 0;
+  font-size: 0.92rem;
+  color: var(--text-mid);
+}
+
+.achievement-details strong {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.achievement-description {
+  font-size: 0.96rem;
+  line-height: 1.78;
+  color: var(--text-mid);
+  margin-top: 12px;
+}
+
+/* ── Volunteer Info ── */
+.volunteer-info {
+  background: var(--primary-pale);
+  padding: 14px 16px;
+  border-radius: var(--radius-sm);
+  margin: 12px 0;
+  border-left: 4px solid var(--primary);
+}
+
+.volunteer-info p {
+  margin: 6px 0;
+  font-size: 0.92rem;
+  color: var(--text-dark);
+}
+
+.volunteer-info strong { color: var(--primary); font-weight: 700; }
+
+.volunteer-info ul { margin: 8px 0 0 20px; padding: 0; }
+.volunteer-info ul li { margin: 4px 0; color: var(--text-dark); font-size: 0.9rem; }
+
+/* ── NIC Cards ── */
+.nic-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.nic-card {
+  background: var(--off-white);
+  padding: 20px;
+  border-radius: var(--radius-md);
+  border-left: 5px solid var(--primary-light);
+  transition: var(--transition);
+}
+
+.nic-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  background: var(--primary-pale);
+}
+
+.nic-card h3 { color: var(--primary); font-size: 1rem; font-weight: 700; margin-bottom: 10px; }
+.nic-card p { font-size: 0.92rem; line-height: 1.7; color: var(--text-mid); }
+
+/* ── Festival Section ── */
+.festival-section { margin-bottom: 24px; }
+.festival-section:last-child { margin-bottom: 0; }
+
+/* ── Full Width Text ── */
+.achievement-text-full { margin-bottom: 24px; }
+.achievement-text-full h3 { color: var(--primary); font-size: 1.05rem; font-weight: 700; margin-bottom: 10px; }
+.achievement-text-full p { font-size: 0.96rem; line-height: 1.78; color: var(--text-mid); }
+.achievement-text-full ul { margin: 8px 0 0 20px; }
+.achievement-text-full ul li { margin: 4px 0; font-size: 0.92rem; color: var(--text-mid); }
+
+/* ── Photo Gallery ── */
+.photo-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.photo-gallery img {
+  width: 100%;
+  height: 230px;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+
+.photo-gallery img:hover {
+  transform: scale(1.03);
+  box-shadow: var(--shadow-md);
+}
+
+.photo-gallery-three {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.photo-gallery-three img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+
+.photo-gallery-three img:hover {
+  transform: scale(1.03);
+  box-shadow: var(--shadow-md);
+}
+
+/* ── Closing ── */
+.achievements-closing {
+  background: linear-gradient(135deg, #001d40 0%, var(--primary) 100%) !important;
+  color: white !important;
+  text-align: center;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  padding: 2.5rem !important;
+  border-left: none !important;
+  border-radius: var(--radius-lg) !important;
+}
+
+.achievements-closing p {
+  margin: 0;
+  font-style: italic;
+  color: rgba(255,255,255,0.9);
+}
+
+/* ── Responsive ── */
+@media (max-width: 968px) {
+  .achievements-wrapper section { margin: 16px 20px; padding: 28px; }
+  .achievement-content-with-image,
+  .achievement-content-with-image.reverse { grid-template-columns: 1fr; }
+  .achievement-content-with-image.reverse .achievement-text,
+  .achievement-content-with-image.reverse .achievement-image { order: initial; }
+  .nic-cards { grid-template-columns: 1fr; }
+  .photo-gallery { grid-template-columns: 1fr; }
+  .photo-gallery-three { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 640px) {
+  .achievements-wrapper section { margin: 12px; padding: 20px; }
+  .achievement-header { flex-direction: column; align-items: flex-start; }
+}
