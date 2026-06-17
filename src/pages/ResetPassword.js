@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import './ResetPassword.css';
 
+import {API_BASE} from '../utils/api';
 
 const ResetPassword = () => {
   const { token } = useParams();
@@ -10,7 +11,7 @@ const ResetPassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`https://nss-website-backend.onrender.com/auth/reset-password/${token}`, {
+      const res = await fetch(`${API_BASE}/auth/reset-password/${token}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ password }),

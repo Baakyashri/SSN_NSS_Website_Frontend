@@ -1,6 +1,7 @@
 import React,{ useEffect, useState } from "react";
 import './AdminDashboard.css';
 import { API_BASE } from '../utils/api';
+import { useNavigate } from "react-router-dom";
 import { getAuthHeaders, getAuthHeadersForFormData, isAuthenticated, logout } from '../utils/auth';
 
 const AdminDashboard = () => {
@@ -14,11 +15,19 @@ const AdminDashboard = () => {
   const [galleryUploading, setGalleryUploading] = useState(false);
   const [newAlbumName, setNewAlbumName] = useState('');
 
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+      localStorage.removeItem("token");
+      navigate("/login");
+  };
+
+
   // Check authentication on component mount
   useEffect(() => {
     if (!isAuthenticated()) {
       alert('Please login to access admin dashboard');
-      window.location.href = '/login';
+      navigate('/login');
       return;
     }
   }, []);
@@ -36,7 +45,7 @@ const AdminDashboard = () => {
 // Fetch albums when gallery tab is active
 useEffect(() => {
   if (activeTab === 'gallery') {
-    fetch("https://nss-website-backend.onrender.com/api/albums")
+    fetch(`${API_BASE}/api/albums`)
       .then((res) => res.json())
       .then((data) => {
         const arr = data || [];
@@ -55,7 +64,7 @@ useEffect(() => {
 useEffect(() => {
   if (!isAuthenticated()) return;
   if (activeTab === 'activities' && selectedAction === 'view') {
-    fetch("https://nss-website-backend.onrender.com/admin/get-activities", {
+    fetch(`${API_BASE}/admin/get-activities`, {
       headers: getAuthHeaders()
     })
       .then((res) => {
@@ -72,16 +81,13 @@ useEffect(() => {
 
 const fetchMembers = async () => {
   try {
-    const res = await fetch(
-      "https://nss-website-backend.onrender.com/admin/get-users",
+    const res = await fetch(`${API_BASE}/user/get-users`,
       { headers: getAuthHeaders() }
     );
-
     if (res.status === 401) {
       logout();
       return;
     }
-
     const data = await res.json();
     setMembersList(data || []);
   } catch (err) {
@@ -91,12 +97,9 @@ const fetchMembers = async () => {
 
 const renderForm = () => {
   
-
 const handleChange = (e) => {
   setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 };
-
-
 
 const handleReportUpload = async (files) => {
   const formData = new FormData();
@@ -105,17 +108,15 @@ const handleReportUpload = async (files) => {
   });
 
   try {
-    const res = await fetch('https://nss-website-backend.onrender.com/admin/upload-reports', {
+    const res = await fetch(`${API_BASE}/admin/upload-reports`, {
       method: 'POST',
       headers: getAuthHeadersForFormData(),
       body: formData
     });
-    
     if (res.status === 401) {
       logout();
       return [];
     }
-    
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || data.message);
     alert(`Successfully uploaded ${files.length} reports!`);
@@ -129,7 +130,7 @@ const handleReportUpload = async (files) => {
 const handleAddUser = async (e) => {
   e.preventDefault();
   try {
-    const res = await fetch('https://nss-website-backend.onrender.com/admin/add-user', {
+    const res = await fetch(`${API_BASE}/user/add-user`, {
       method: 'POST',
       headers: getAuthHeaders(),
       body: JSON.stringify(formData)
@@ -141,8 +142,8 @@ const handleAddUser = async (e) => {
     }
 
     const data = await res.json();
-    if (!res.ok) throw new Error(data.error || data.message);
-    alert(data.message);
+    if (!res.ok) throw new Error(data.error || data.msg);
+    alert(data.msg);
     setFormData({});
   } catch (err) {
     alert('Add Error: ' + err.message);
@@ -152,7 +153,7 @@ const handleAddUser = async (e) => {
 const handleUpdateUser = async (e) => {
   e.preventDefault();
   try {
-    const res = await fetch('https://nss-website-backend.onrender.com/admin/update-user', {
+    const res = await fetch(`${API_BASE}/user/update-user`, {
       method: 'PUT',
       headers: getAuthHeaders(),
       body: JSON.stringify(formData)
@@ -164,8 +165,8 @@ const handleUpdateUser = async (e) => {
     }
 
     const data = await res.json();
-    if (!res.ok) throw new Error(data.error || data.message);
-    alert(data.message);
+    if (!res.ok) throw new Error(data.error || data.msg);
+    alert(data.msg);
     setFormData({});
   } catch (err) {
     alert('Update Error: ' + err.message);
@@ -175,7 +176,7 @@ const handleUpdateUser = async (e) => {
 const handleDeleteUser = async (e) => {
   e.preventDefault();
   try {
-    const res = await fetch('https://nss-website-backend.onrender.com/admin/delete-user', {
+    const res = await fetch(`${API_BASE}/user/delete-user`, {
       method: 'DELETE',
       headers: getAuthHeaders(),
       body: JSON.stringify({ email: formData.email })
@@ -187,15 +188,13 @@ const handleDeleteUser = async (e) => {
     }
 
     const data = await res.json();
-    if (!res.ok) throw new Error(data.error || data.message);
-    alert(data.message);
+    if (!res.ok) throw new Error(data.error || data.msg);
+    alert(data.msg);
     setFormData({});
   } catch (err) {
     alert('Delete Error: ' + err.message);
   }
 };
-
-
 
   if (activeTab === 'members') {
     switch (selectedAction) {
@@ -203,15 +202,12 @@ const handleDeleteUser = async (e) => {
         return (
           <form
             className="form-card"
-            onSubmit={(e) => handleAddUser(e, 'https://nss-website-backend.onrender.com/admin/add-user','POST')}
+            onSubmit={(e) => handleAddUser(e, `${API_BASE}/user/add-user`,'POST')}
           >
             <h3>Add Member</h3>
             <input name="email" type="email" placeholder="Email" value={formData.email || ""} onChange={handleChange} required />
             <input name="password" type="password" placeholder="Password" value={formData.password || ""} onChange={handleChange} required />
             <input name="role" type="text" placeholder="Role" value={formData.role || ""} onChange={handleChange} required />
-            {formData.role === 'verticalhead' && (
-            <input name="vertical" type="text" placeholder="Vertical (e.g. Finance, Photography)" value={formData.vertical || ''} onChange={handleChange} required />
-            )}
             <button type="submit">Add</button>
           </form>
         );
@@ -219,7 +215,7 @@ const handleDeleteUser = async (e) => {
         return (
           <form
             className="form-card"
-            onSubmit={(e) => handleDeleteUser(e, 'https://nss-website-backend.onrender.com/admin/delete-user','DELETE')}
+            onSubmit={(e) => handleDeleteUser(e, `${API_BASE}/user/delete-user`,'DELETE')}
           >
             <h3>Delete Member</h3>
             <input name="email" type="email" placeholder="Email" value={formData.email || ""} onChange={handleChange} required />
@@ -231,7 +227,7 @@ const handleDeleteUser = async (e) => {
         return (
           <form
             className="form-card"
-            onSubmit={(e) => handleUpdateUser(e, 'https://nss-website-backend.onrender.com/admin/update-user','PUT')}
+            onSubmit={(e) => handleUpdateUser(e, `${API_BASE}/user/update-user`,'PUT')}
           >
             <h3>Update Member</h3>
             <input name="existingEmail" type="email" placeholder="Existing Email" value={formData.existingEmail || ""} onChange={handleChange} required />
@@ -240,9 +236,6 @@ const handleDeleteUser = async (e) => {
             <input name="newEmail" type="email" placeholder="New Email"  value={formData.newEmail || ""}onChange={handleChange} required />
             <input name="newPassword" type="password" placeholder="New Password" value={formData.newPassword || ""} onChange={handleChange} required />
             <input name="newRole" type="text" placeholder="New Role" value={formData.newRole || ""} onChange={handleChange} required />
-            {formData.newRole === 'verticalhead' && (
-            <input name="newVertical" type="text" placeholder="New Vertical Name" value={formData.newVertical || ""} onChange={handleChange} required />
-            )}
             <button type="submit">Update</button>
           </form>
         );
@@ -252,16 +245,13 @@ const handleDeleteUser = async (e) => {
             <h3>Members List</h3>
             <table>
               <thead>
-                <tr><th>Email</th><th>Password</th><th>Role</th><th>Vertical</th></tr>
+                <tr><th>Email</th><th>Role</th></tr>
               </thead>
               <tbody>
                 {membersList.map((user, index) => (
                   <tr key={index}>
                     <td>{user.email}</td>
-                    <td>{user.password}</td>
                     <td>{user.role}</td>
-                    {/* Show vertical only if present */}
-                    {user.vertical ? <td>{user.vertical}</td> : <td>-</td>}
                   </tr>
                 ))}
               </tbody>
@@ -297,7 +287,7 @@ const handleDeleteUser = async (e) => {
                 photoFormData.append('photos', file);
               });
 
-              const photoRes = await fetch('https://nss-website-backend.onrender.com/admin/upload-photos', {
+              const photoRes = await fetch(`${API_BASE}/admin/upload-photos`, {
                 method: 'POST',
                 headers: getAuthHeadersForFormData(),
                 body: photoFormData
@@ -322,7 +312,7 @@ const handleDeleteUser = async (e) => {
               reports: uploadedReports
             };
 
-            const res = await fetch("https://nss-website-backend.onrender.com/admin/add-activity", {
+            const res = await fetch(`${API_BASE}/admin/add-activity`, {
               method: 'POST',
               headers: getAuthHeaders(),
               body: JSON.stringify(activityData),
@@ -336,14 +326,11 @@ const handleDeleteUser = async (e) => {
             
             // Refresh activities list if we're in view mode
             if (selectedAction === 'view') {
-              fetch("https://nss-website-backend.onrender.com/admin/get-activities")
+              fetch(`${API_BASE}/admin/get-activities`)
                 .then((res) => res.json())
                 .then((data) => setActivitiesList(data || []))
                 .catch((err) => console.error("Fetch activities error:", err));
             }
-            
-            // Optionally redirect to home page after successful addition
-            // window.location.href = '/';
           } catch (err) {
             alert("Add Activity Error: " + err.message);
           }
@@ -488,7 +475,7 @@ const handleDeleteUser = async (e) => {
         <form className="form-card" onSubmit={async (e) => {
           e.preventDefault();
           try {
-            const res = await fetch("https://nss-website-backend.onrender.com/admin/delete-activity", {
+            const res = await fetch(`${API_BASE}/admin/delete-activity`, {
               method: 'DELETE',
               headers: getAuthHeaders(),
               body: JSON.stringify({ title: formData.title }),
@@ -527,7 +514,7 @@ const handleDeleteUser = async (e) => {
                 photoFormData.append('photos', file);
               });
 
-              const photoRes = await fetch('https://nss-website-backend.onrender.com/admin/upload-photos', {
+              const photoRes = await fetch(`${API_BASE}/admin/upload-photos`, {
                 method: 'POST',
                 headers: getAuthHeadersForFormData(),
                 body: photoFormData
@@ -553,7 +540,7 @@ const handleDeleteUser = async (e) => {
               newReports: uploadedReports
             };
 
-            const res = await fetch("https://nss-website-backend.onrender.com/admin/update-activity", {
+            const res = await fetch(`${API_BASE}/admin/update-activity`, {
               method: 'PUT',
               headers: getAuthHeaders(),
               body: JSON.stringify(updateData),
@@ -566,7 +553,7 @@ const handleDeleteUser = async (e) => {
             setFormData({});
 
             // Refresh activities list
-            fetch("https://nss-website-backend.onrender.com/admin/get-activities", {
+            fetch(`${API_BASE}/admin/get-activities`, {
               headers: getAuthHeaders()
             })
               .then((res) => res.json())
@@ -787,7 +774,7 @@ if (activeTab === 'gallery') {
     e.preventDefault();
     if (!newAlbumName) return alert('Enter album name');
     try {
-      const res = await fetch('https://nss-website-backend.onrender.com/api/albums', {
+      const res = await fetch(`${API_BASE}/api/albums`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: newAlbumName })
@@ -796,7 +783,7 @@ if (activeTab === 'gallery') {
       if (!res.ok) throw new Error(data.error || data.message);
       alert('Album created');
       setNewAlbumName('');
-      const ref = await fetch('https://nss-website-backend.onrender.com/api/albums');
+      const ref = await fetch(`${API_BASE}/api/albums`);
       const arr = await ref.json();
       setAlbumsList(arr || []);
       // notify gallery viewers to refresh
@@ -811,174 +798,114 @@ if (activeTab === 'gallery') {
     setGalleryFiles(files.length ? files : null);
   };
 
-  // const handleGalleryUpload = async (albumName) => {
-  //   if (!galleryFiles || galleryFiles.length === 0) return alert('Choose photos to upload');
 
-  //   // If no album selected, create a default one
-  //   let finalAlbumName = albumName;
-  //   if (!finalAlbumName) {
-  //     finalAlbumName = `Gallery ${new Date().getFullYear()}`;
-  //     try {
-  //       const createRes = await fetch('https://nss-website-backend.onrender.com/api/albums', {
-  //         method: 'POST',
-  //         headers: { 'Content-Type': 'application/json' },
-  //         body: JSON.stringify({ name: finalAlbumName })
-  //       });
-  //       // if album already exists, it will error but we continue
-  //       if (createRes.ok) {
-  //         setAlbumsList(prev => [...prev, { name: finalAlbumName, photos: [] }]);
-  //       }
-  //     } catch (err) {
-  //       console.log('Album may already exist, continuing...');
-  //     }
-  //   }
-
-  //   // 1) Upload files to admin upload endpoint with JWT
-  //   const form = new FormData();
-  //   galleryFiles.forEach((f) => form.append('photos', f));
-
-  //   try {
-  //     setGalleryUploading(true);
-
-  //     const uploadRes = await fetch('https://nss-website-backend.onrender.com/admin/upload-photos', {
-  //       method: 'POST',
-  //       headers: getAuthHeadersForFormData(),
-  //       body: form
-  //     });
-
-  //     if (uploadRes.status === 401) {
-  //       logout();
-  //       return;
-  //     }
-
-  //     const uploadData = await uploadRes.json();
-  //     if (!uploadRes.ok) throw new Error(uploadData.error || uploadData.message || 'Admin upload failed');
-
-  //     const uploadedPhotos = uploadData.photos || [];
-
-  //     // 2) Associate uploaded photos with album via JSON to album endpoint
-  //     const associateRes = await fetch(`https://nss-website-backend.onrender.com/api/albums/${encodeURIComponent(finalAlbumName)}/photos`, {
-  //       method: 'POST',
-  //       headers: { 'Content-Type': 'application/json' },
-  //       body: JSON.stringify({ photos: uploadedPhotos })
-  //     });
-
-  //     const assocData = await associateRes.json();
-  //     if (!associateRes.ok) throw new Error(assocData.error || assocData.message || 'Associate failed');
-
-  //     alert('Uploaded and associated ' + (uploadedPhotos.length) + ' photos');
-  //     setGalleryFiles(null);
-
-  //     // refresh albums
-  //     const ref = await fetch('https://nss-website-backend.onrender.com/api/albums');
-  //     const arr = await ref.json();
-  //     setAlbumsList(arr || []);
-  //     // notify gallery viewers to refresh
-  //     try { localStorage.setItem('galleryUpdated', Date.now().toString()); window.dispatchEvent(new Event('galleryUpdated')); } catch (e) {}
-
-  //   } catch (err) {
-  //     console.error('Gallery upload error', err);
-  //     alert('Upload error: ' + err.message);
-  //   } finally {
-  //     setGalleryUploading(false);
-  //   }
-  // };
-  const handleGalleryUpload = async (albumName) => {
-    if (!galleryFiles || galleryFiles.length === 0) return alert('Choose photos to upload');
-
-    // If no album selected, create a default one
-    let finalAlbumName = albumName;
-    if (!finalAlbumName) {
-      finalAlbumName = `Gallery ${new Date().getFullYear()}`;
-      try {
-        await fetch('https://nss-website-backend.onrender.com/api/albums', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name: finalAlbumName })
-        });
-      } catch (err) {
-        console.log('Album creation check ignored');
-      }
-    }
-
-    // --- NEW ONE-STEP UPLOAD LOGIC ---
-    const form = new FormData();
-    galleryFiles.forEach((f) => form.append('photos', f)); // 'photos' key matches backend
-
-    try {
-      setGalleryUploading(true);
-
-      // Send files DIRECTLY to the album endpoint
-      const res = await fetch(`https://nss-website-backend.onrender.com/api/albums/${encodeURIComponent(finalAlbumName)}/photos`, {
+ 
+  const handleGalleryUpload = async (albumId) => {
+  if (!albumId) {
+    return alert('Select an album');
+  }
+  if (!galleryFiles || galleryFiles.length === 0) {
+    return alert('Choose photos to upload');
+  }
+  const form = new FormData();
+  galleryFiles.forEach((file) => {form.append('photos', file);});
+  try {
+    setGalleryUploading(true);
+    const res = await fetch(
+      `${API_BASE}/api/albums/${albumId}/photos`,
+      {
         method: 'POST',
-        // We manually add the token. Do NOT add 'Content-Type': 'multipart/form-data' 
-        // because the browser must generate the boundary string automatically.
         headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}` 
+          Authorization: `Bearer ${localStorage.getItem('token')}`
         },
         body: form
-      });
-
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || data.message || 'Upload failed');
-
-      alert(`Success! ${data.message || 'Photos uploaded.'}`);
-      setGalleryFiles(null);
-
-      // Refresh albums list
-      const ref = await fetch('https://nss-website-backend.onrender.com/api/albums');
-      const arr = await ref.json();
-      setAlbumsList(arr || []);
-      
-      // Notify listeners (for the public gallery page to update)
-      try { 
-          localStorage.setItem('galleryUpdated', Date.now().toString()); 
-          window.dispatchEvent(new Event('galleryUpdated')); 
-      } catch (e) {}
-
-    } catch (err) {
-      console.error('Gallery upload error', err);
-      alert('Upload error: ' + err.message);
-    } finally {
-      setGalleryUploading(false);
+      }
+    );
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.error ||data.message ||'Upload failed');
     }
-  };
-
-  const handleDeleteAlbum = async (albumName) => {
-    if (!albumName) return alert('Select an album');
-    if (!window.confirm(`Delete album "${albumName}"? This will remove all photos.`)) return;
+    alert(data.message || 'Photos uploaded');
+    setGalleryFiles(null);
+    const ref = await fetch(`${API_BASE}/api/albums`);
+    const arr = await ref.json();
+    setAlbumsList(arr || []);
     try {
-      const res = await fetch(`https://nss-website-backend.onrender.com/api/albums/${encodeURIComponent(albumName)}`, { method: 'DELETE' });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || data.message || 'Delete failed');
-      alert(data.message || 'Album deleted');
-      const ref = await fetch('https://nss-website-backend.onrender.com/api/albums');
-      const arr = await ref.json();
-      setAlbumsList(arr || []);
-      // notify gallery viewers to refresh
-      try { localStorage.setItem('galleryUpdated', Date.now().toString()); window.dispatchEvent(new Event('galleryUpdated')); } catch (e) {}
-      setFormData(prev => ({ ...prev, albumName: '' }));
-    } catch (err) {
-      alert('Delete error: ' + err.message);
-    }
-  };
+      localStorage.setItem(
+        'galleryUpdated',
+        Date.now().toString()
+      );
+      window.dispatchEvent(new Event('galleryUpdated'));
+    } catch (e) {}
+  } catch (err) {
+    console.error(err);
+    alert('Upload error: ' + err.message);
+  } finally {
+    setGalleryUploading(false);
+  }
+};
 
-  const handleDeletePhoto = async (albumName, index) => {
-    if (!window.confirm('Delete this photo?')) return;
-    try {
-      const res = await fetch(`https://nss-website-backend.onrender.com/api/albums/${encodeURIComponent(albumName)}/photos/${index}`, { method: 'DELETE' });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || data.message || 'Delete photo failed');
-      alert(data.message || 'Photo deleted');
-      const ref = await fetch('https://nss-website-backend.onrender.com/api/albums');
-      const arr = await ref.json();
-      setAlbumsList(arr || []);
-      // notify gallery viewers to refresh
-      try { localStorage.setItem('galleryUpdated', Date.now().toString()); window.dispatchEvent(new Event('galleryUpdated')); } catch (e) {}
-    } catch (err) {
-      alert('Delete photo error: ' + err.message);
+
+
+ const handleDeleteAlbum = async (albumId) => {
+  if (!albumId) { return alert('Select an album');}
+  const album = albumsList.find(
+    a => a._id === albumId
+  );
+  if (!window.confirm(`Delete album "${album?.name}"?`)) {
+    return;
+  }
+  try {
+    const res = await fetch(
+      `${API_BASE}/api/albums/${albumId}`,
+      {
+        method: 'DELETE'
+      }
+    );
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.error ||data.message ||'Delete failed');
     }
-  };
+    alert(data.message ||'Album deleted');
+    const ref = await fetch(`${API_BASE}/api/albums`);
+    const arr = await ref.json();
+    setAlbumsList(arr || []);
+    try {
+      localStorage.setItem('galleryUpdated',Date.now().toString());
+      window.dispatchEvent(new Event('galleryUpdated'));
+    } catch (e) {}
+    setFormData(prev => ({...prev,albumId: ''}));
+  } catch (err) {
+    alert('Delete error: ' + err.message);
+  }
+};
+
+ const handleDeletePhoto = async (albumId,photoId) => {
+  if (!window.confirm('Delete this photo?' )) {
+    return;
+  }
+  try {
+    const res = await fetch(`${API_BASE}/api/albums/${albumId}/photos/${photoId}`,
+      {
+        method: 'DELETE'
+      }
+    );
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.error ||data.message ||'Delete photo failed');
+    }
+    alert(data.message ||'Photo deleted');
+    const ref = await fetch('${API_BASE}/api/albums');
+    const arr = await ref.json();
+    setAlbumsList(arr || []);
+    try {
+      localStorage.setItem('galleryUpdated',Date.now().toString());
+      window.dispatchEvent(new Event('galleryUpdated'));
+    } catch (e) {}
+  } catch (err) {
+    alert('Delete photo error: ' + err.message);
+  }
+};
 
   switch (selectedAction) {
     case 'add':
@@ -994,15 +921,15 @@ if (activeTab === 'gallery') {
             <label>Select album to upload (or create above):</label>
             <select name="albumName" value={formData.albumName || ''} onChange={(e) => setFormData(prev => ({ ...prev, albumName: e.target.value }))}>
               <option value="">-- Select --</option>
-              {albumsList.map((a, idx) => (
-                <option key={idx} value={a.name}>{a.name}</option>
+              {albumsList.map((a) => (
+                <option key={a._id} value={a._id}>{a.name}</option>
               ))}
             </select>
           </div>
 
           <div style={{ marginBottom: 12 }}>
             <input type="file" multiple accept="image/*" onChange={handleGalleryFileChange} />
-            <button onClick={() => handleGalleryUpload(formData.albumName)} disabled={galleryUploading} style={{ marginLeft: 8 }}>{galleryUploading ? 'Uploading...' : 'Upload to Album'}</button>
+            <button onClick={() => handleGalleryUpload(formData.albumId)} disabled={galleryUploading} style={{ marginLeft: 8 }}>{galleryUploading ? 'Uploading...' : 'Upload to Album'}</button>
           </div>
         </div>
       );
@@ -1015,27 +942,27 @@ if (activeTab === 'gallery') {
             <label>Select album:</label>
             <select name="albumName" value={formData.albumName || ''} onChange={(e) => setFormData(prev => ({ ...prev, albumName: e.target.value }))}>
               <option value="">-- Select --</option>
-              {albumsList.map((a, idx) => (
-                <option key={idx} value={a.name}>{a.name}</option>
+              {albumsList.map((a) => (
+                <option key={a._id} value={a._id}>{a.name}</option>
               ))}
             </select>
           </div>
 
           <div style={{ marginBottom: 12 }}>
             <input type="file" multiple accept="image/*" onChange={handleGalleryFileChange} />
-            <button onClick={() => handleGalleryUpload(formData.albumName)} disabled={galleryUploading} style={{ marginLeft: 8 }}>{galleryUploading ? 'Uploading...' : 'Upload Photos'}</button>
+            <button onClick={() => handleGalleryUpload(formData.albumId)} disabled={galleryUploading} style={{ marginLeft: 8 }}>{galleryUploading ? 'Uploading...' : 'Upload Photos'}</button>
           </div>
 
           <div>
             <h4>Photos</h4>
             {formData.albumName ? (
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))', gap: 8 }}>
-                {(albumsList.find(a => a.name === formData.albumName)?.photos || []).map((p, idx) => {
+                {(albumsList.find(a => a._id === formData.albumName)?.photos || []).map((p) => {
                   const src = p.url && p.url.startsWith('http') ? p.url : `${API_BASE}${p.url}`;
                   return (
-                  <div key={idx} style={{ position: 'relative' }}>
+                  <div key={p._id} style={{ position: 'relative' }}>
                     <img src={src} alt={p.filename || p.original_name} style={{ width: '100%', height: 90, objectFit: 'cover', borderRadius: 4 }} />
-                    <button type="button" onClick={() => handleDeletePhoto(formData.albumName, idx)} style={{ position: 'absolute', top: 6, right: 6, background: '#dc3545', color: '#fff', border: 'none', borderRadius: 4, padding: '4px 6px', cursor: 'pointer' }}>Delete</button>
+                    <button type="button" onClick={() => handleDeletePhoto(formData.albumId, p._id)} style={{ position: 'absolute', top: 6, right: 6, background: '#dc3545', color: '#fff', border: 'none', borderRadius: 4, padding: '4px 6px', cursor: 'pointer' }}>Delete</button>
                   </div>
                   )
                 })}
@@ -1053,12 +980,12 @@ if (activeTab === 'gallery') {
             <label>Select album to delete:</label>
             <select name="albumName" value={formData.albumName || ''} onChange={(e) => setFormData(prev => ({ ...prev, albumName: e.target.value }))}>
               <option value="">-- Select --</option>
-              {albumsList.map((a, idx) => (
-                <option key={idx} value={a.name}>{a.name}</option>
+              {albumsList.map((a) => (
+                <option key={a._id} value={a._id}>{a.name}</option>
               ))}
             </select>
           </div>
-          <button onClick={() => handleDeleteAlbum(formData.albumName)} style={{ background: '#dc3545', color: '#fff', border: 'none', padding: '8px 12px', borderRadius: 6 }}>Delete Album</button>
+          <button onClick={() => handleDeleteAlbum(formData.albumId)} style={{ background: '#dc3545', color: '#fff', border: 'none', padding: '8px 12px', borderRadius: 6 }}>Delete Album</button>
         </div>
       );
 
@@ -1067,8 +994,8 @@ if (activeTab === 'gallery') {
         <div className="form-card">
           <h3>Albums Preview</h3>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 12 }}>
-            {albumsList.map((a, idx) => (
-              <div key={idx} style={{ padding: 8, border: '1px solid #ddd', borderRadius: 6 }}>
+            {albumsList.map((a) => (
+              <div key={a._id} style={{ padding: 8, border: '1px solid #ddd', borderRadius: 6 }}>
                 <strong style={{ display: 'block', marginBottom: 8 }}>{a.name}</strong>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 6 }}>
                   {(a.photos || []).slice(0,6).map((p, i) => (
@@ -1089,9 +1016,11 @@ if (activeTab === 'gallery') {
 
 
 
-};
 
+
+};
   return (
+
     <div className="dashboard-container">
       <aside className="sidebar">
         <h2>Admin Panel</h2>
@@ -1122,6 +1051,9 @@ if (activeTab === 'gallery') {
             }}
           >
             Gallery
+          </li>
+          <li onClick={handleLogout} >
+            Logout
           </li>
         </ul>
       </aside>

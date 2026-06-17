@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import './Login.css';
 import { useNavigate } from 'react-router-dom';
+import {API_BASE} from '../utils/api';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [verticalName, setVerticalName] = useState('');
-  const [userRole, setUserRole] = useState(''); // 'admin' or 'vertical_head'
+  const [userRole, setUserRole] = useState(''); 
   const navigate = useNavigate();
 
   // Check role immediately when user finishes typing email and leaves the field
@@ -14,12 +14,10 @@ const Login = () => {
     if (!email) return;
 
     try {
-      const res = await fetch(`https://nss-website-backend.onrender.com/auth/check-user?email=${email}`);
+      const res = await fetch(`${API_BASE}/auth/check-user?email=${email}`);
       const data = await res.json();
 
-      if (data.role === 'verticalhead') {
-        setUserRole('vertical_head'); // show vertical dropdown
-      } else if (data.role === 'admin') {
+      if(data.role === 'admin') {
         setUserRole('admin'); // admin detected
       } else {
         setUserRole(''); // unknown/invalid user
@@ -35,11 +33,8 @@ const Login = () => {
 
     try {
       const bodyData = { email, password };
-      if (userRole === 'vertical_head') {
-        bodyData.vertical = verticalName; // include vertical only for vertical heads
-      }
 
-      const response = await fetch('https://nss-website-backend.onrender.com/auth/login', {
+      const response = await fetch(`${API_BASE}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(bodyData),
@@ -80,21 +75,6 @@ const Login = () => {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-
-          {/* Show vertical select only for vertical heads */}
-          {userRole === 'vertical_head' && (
-            <select
-              value={verticalName}
-              onChange={(e) => setVerticalName(e.target.value)}
-              required
-            >
-              <option value="">Select Vertical</option>
-              <option value="photography">Photography</option>
-              <option value="events">Events</option>
-              <option value="design">Design</option>
-            </select>
-          )}
-
           <button type="submit">Login</button>
         </form>
       </div>
