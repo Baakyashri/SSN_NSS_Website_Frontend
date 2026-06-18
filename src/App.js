@@ -14,7 +14,6 @@ import Login from "./pages/Login";
 import AdminDashboard from "./pages/AdminDashboard";
 import Gallery from "./pages/Gallery";
 import ActivitiesPage from "./pages/ActivitiesPage";
-import ResetPassword from "./pages/ResetPassword";
 import ClubsPage from "./pages/ClubsPage";
 
 function App() {
@@ -33,20 +32,13 @@ function App() {
         <Route path="/contact" element={<ContactUsPage />} />
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/activities" element={<ActivitiesPage />} />
-
-        {/* ===== TEAMS ROUTES ===== */}
         <Route path="/teams" element={<TeamsPage defaultTab="core" />} />
         <Route path="/teams/core" element={<TeamsPage defaultTab="core" />} />
         <Route path="/teams/volunteers" element={<TeamsPage defaultTab="volunteers" />} />
-
-        {/* ===== CLUBS ROUTES ===== */}
         <Route path="/clubs" element={<ClubsPage />} />
         <Route path="/clubs/:clubName" element={<ClubsPage />} />
-
-        {/* ===== AUTH / DASHBOARD ===== */}
         <Route path="/login" element={<Login />} />
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
-        <Route path="/reset-password/:token" element={<ResetPassword />} />
       </Routes>
     </Router>
   );

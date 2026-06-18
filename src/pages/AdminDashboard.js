@@ -30,7 +30,9 @@ const AdminDashboard = () => {
       navigate('/login');
       return;
     }
-  }, []);
+  }, [navigate]);
+
+
  const handleActionClick = (action) => {
   setSelectedAction(action);
 
@@ -45,7 +47,7 @@ const AdminDashboard = () => {
 // Fetch albums when gallery tab is active
 useEffect(() => {
   if (activeTab === 'gallery') {
-    fetch(`${API_BASE}/api/albums`)
+    fetch(`${API_BASE}/albums`)
       .then((res) => res.json())
       .then((data) => {
         const arr = data || [];
@@ -64,7 +66,7 @@ useEffect(() => {
 useEffect(() => {
   if (!isAuthenticated()) return;
   if (activeTab === 'activities' && selectedAction === 'view') {
-    fetch(`${API_BASE}/admin/get-activities`, {
+    fetch(`${API_BASE}/activities/get-activities`, {
       headers: getAuthHeaders()
     })
       .then((res) => {
@@ -108,7 +110,7 @@ const handleReportUpload = async (files) => {
   });
 
   try {
-    const res = await fetch(`${API_BASE}/admin/upload-reports`, {
+    const res = await fetch(`${API_BASE}/reports/upload-reports`, {
       method: 'POST',
       headers: getAuthHeadersForFormData(),
       body: formData
@@ -287,7 +289,7 @@ const handleDeleteUser = async (e) => {
                 photoFormData.append('photos', file);
               });
 
-              const photoRes = await fetch(`${API_BASE}/admin/upload-photos`, {
+              const photoRes = await fetch(`${API_BASE}/photos/upload-photos`, {
                 method: 'POST',
                 headers: getAuthHeadersForFormData(),
                 body: photoFormData
@@ -308,11 +310,13 @@ const handleDeleteUser = async (e) => {
               title: formData.title,
               description: formData.description,
               date: formData.date,
+              location:formData.location,
+              status:formData.status,
               photos: uploadedPhotos,
               reports: uploadedReports
             };
 
-            const res = await fetch(`${API_BASE}/admin/add-activity`, {
+            const res = await fetch(`${API_BASE}/activities/add-activity`, {
               method: 'POST',
               headers: getAuthHeaders(),
               body: JSON.stringify(activityData),
@@ -326,7 +330,7 @@ const handleDeleteUser = async (e) => {
             
             // Refresh activities list if we're in view mode
             if (selectedAction === 'view') {
-              fetch(`${API_BASE}/admin/get-activities`)
+              fetch(`${API_BASE}/activities/get-activities`)
                 .then((res) => res.json())
                 .then((data) => setActivitiesList(data || []))
                 .catch((err) => console.error("Fetch activities error:", err));
@@ -342,6 +346,10 @@ const handleDeleteUser = async (e) => {
           <textarea id="description" name="description" placeholder="Activity Description" value={formData.description || ''} onChange={handleChange} required />
           <label htmlFor="date">Date:</label>
           <input id="date" name="date" type="date" value={formData.date || ''} onChange={handleChange} required />
+          <label htmlFor="location">Location:</label>
+          <input id="location" name="location" type="text" placeholder="Activity Location" value={formData.location || ''} onChange={handleChange} required />
+          <label htmlFor="status">Status:</label>
+          <input id="status" name="status" type="text" placeholder="Activity Status(upcoming/completed)" value={formData.status || ''} onChange={handleChange} required />
           <div className="photo-section">
             <h4>Upload Activity Photos</h4>
             <label htmlFor="photos">Photos:</label>
@@ -465,7 +473,7 @@ const handleDeleteUser = async (e) => {
               )}
             </div>
           </div>
-
+          
           <button type="submit">Add</button>
         </form>
       );
@@ -475,7 +483,7 @@ const handleDeleteUser = async (e) => {
         <form className="form-card" onSubmit={async (e) => {
           e.preventDefault();
           try {
-            const res = await fetch(`${API_BASE}/admin/delete-activity`, {
+            const res = await fetch(`${API_BASE}/activities/delete-activity`, {
               method: 'DELETE',
               headers: getAuthHeaders(),
               body: JSON.stringify({ title: formData.title }),
@@ -514,7 +522,7 @@ const handleDeleteUser = async (e) => {
                 photoFormData.append('photos', file);
               });
 
-              const photoRes = await fetch(`${API_BASE}/admin/upload-photos`, {
+              const photoRes = await fetch(`${API_BASE}/photos/upload-photos`, {
                 method: 'POST',
                 headers: getAuthHeadersForFormData(),
                 body: photoFormData
@@ -536,11 +544,13 @@ const handleDeleteUser = async (e) => {
               newTitle: formData.newTitle,
               newDescription: formData.newDescription,
               newDate: formData.newDate,
+              newLocation:formData.newLocation,
+              newStatus:formData.newStatus,
               newPhotos: uploadedPhotos,
               newReports: uploadedReports
             };
 
-            const res = await fetch(`${API_BASE}/admin/update-activity`, {
+            const res = await fetch(`${API_BASE}/activities/update-activity`, {
               method: 'PUT',
               headers: getAuthHeaders(),
               body: JSON.stringify(updateData),
@@ -553,7 +563,7 @@ const handleDeleteUser = async (e) => {
             setFormData({});
 
             // Refresh activities list
-            fetch(`${API_BASE}/admin/get-activities`, {
+            fetch(`${API_BASE}/activities/get-activities`, {
               headers: getAuthHeaders()
             })
               .then((res) => res.json())
@@ -572,7 +582,10 @@ const handleDeleteUser = async (e) => {
           <textarea id="newDescription" name="newDescription" placeholder="New Description" value={formData.newDescription || ''} onChange={handleChange} required />
           <label htmlFor="newDate">New Date:</label>
           <input id="newDate" name="newDate" type="date" value={formData.newDate || ''} onChange={handleChange} required />
-
+          <label htmlFor="newLocation">New Location:</label>
+          <input id="newlLocation" name="newLocation" type="text" placeholder="New Location" value={formData.newLocation || ''} onChange={handleChange} required />
+          <label htmlFor="newStatus">New Status:</label>
+          <input id="newStatus" name="newStatus" type="text" placeholder="New Status(upcoming/completed)" value={formData.newStatus || ''} onChange={handleChange} required />
           <div className="photo-section">
             <h4>Upload New Activity Photos (optional)</h4>
             <div className="upload-section">
@@ -699,10 +712,10 @@ const handleDeleteUser = async (e) => {
     case 'view':
       return (
         <div className="form-card">
-          <h3>Latest Activities</h3>
+          <h3>Activities</h3>
           <table>
             <thead>
-              <tr><th>Title</th><th>Description</th><th>Date</th><th>Photos</th><th>Reports</th></tr>
+              <tr><th>Title</th><th>Description</th><th>Date</th><th>Location</th><th>Status</th><th>Photos</th><th>Reports</th></tr>
             </thead>
             <tbody>
               {activitiesList.length > 0 ? (
@@ -711,6 +724,8 @@ const handleDeleteUser = async (e) => {
                     <td>{act.title}</td>
                     <td>{act.description}</td>
                     <td>{act.date}</td>
+                    <td>{act.location}</td>
+                    <td>{act.status}</td>
                     <td>
                       {act.photos && act.photos.length > 0 ? (
                         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
@@ -774,7 +789,7 @@ if (activeTab === 'gallery') {
     e.preventDefault();
     if (!newAlbumName) return alert('Enter album name');
     try {
-      const res = await fetch(`${API_BASE}/api/albums`, {
+      const res = await fetch(`${API_BASE}/albums`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: newAlbumName })
@@ -783,7 +798,7 @@ if (activeTab === 'gallery') {
       if (!res.ok) throw new Error(data.error || data.message);
       alert('Album created');
       setNewAlbumName('');
-      const ref = await fetch(`${API_BASE}/api/albums`);
+      const ref = await fetch(`${API_BASE}/albums`);
       const arr = await ref.json();
       setAlbumsList(arr || []);
       // notify gallery viewers to refresh
@@ -812,7 +827,7 @@ if (activeTab === 'gallery') {
   try {
     setGalleryUploading(true);
     const res = await fetch(
-      `${API_BASE}/api/albums/${albumId}/photos`,
+      `${API_BASE}/albums/${albumId}/photos`,
       {
         method: 'POST',
         headers: {
@@ -827,7 +842,7 @@ if (activeTab === 'gallery') {
     }
     alert(data.message || 'Photos uploaded');
     setGalleryFiles(null);
-    const ref = await fetch(`${API_BASE}/api/albums`);
+    const ref = await fetch(`${API_BASE}/albums`);
     const arr = await ref.json();
     setAlbumsList(arr || []);
     try {
@@ -857,7 +872,7 @@ if (activeTab === 'gallery') {
   }
   try {
     const res = await fetch(
-      `${API_BASE}/api/albums/${albumId}`,
+      `${API_BASE}/albums/${albumId}`,
       {
         method: 'DELETE'
       }
@@ -867,7 +882,7 @@ if (activeTab === 'gallery') {
       throw new Error(data.error ||data.message ||'Delete failed');
     }
     alert(data.message ||'Album deleted');
-    const ref = await fetch(`${API_BASE}/api/albums`);
+    const ref = await fetch(`${API_BASE}/albums`);
     const arr = await ref.json();
     setAlbumsList(arr || []);
     try {
@@ -885,7 +900,7 @@ if (activeTab === 'gallery') {
     return;
   }
   try {
-    const res = await fetch(`${API_BASE}/api/albums/${albumId}/photos/${photoId}`,
+    const res = await fetch(`${API_BASE}/albums/${albumId}/photos/${photoId}`,
       {
         method: 'DELETE'
       }
@@ -895,7 +910,7 @@ if (activeTab === 'gallery') {
       throw new Error(data.error ||data.message ||'Delete photo failed');
     }
     alert(data.message ||'Photo deleted');
-    const ref = await fetch('${API_BASE}/api/albums');
+    const ref = await fetch(`${API_BASE}/albums`);
     const arr = await ref.json();
     setAlbumsList(arr || []);
     try {
