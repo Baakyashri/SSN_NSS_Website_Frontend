@@ -46,8 +46,8 @@ const AdminDashboard = () => {
 
 // Fetch albums when gallery tab is active
 useEffect(() => {
-  if (activeTab === 'gallery') {
-    fetch(`${API_BASE}/albums`)
+  if (activeTab === 'gallery' && selectedAction === 'view') {
+    fetch(`${API_BASE}/albums/get-albums`)
       .then((res) => res.json())
       .then((data) => {
         const arr = data || [];
@@ -55,7 +55,7 @@ useEffect(() => {
       })
       .catch((err) => console.error('Error fetching albums:', err));
   }
-}, [activeTab]);
+}, [activeTab,selectedAction]);
 
 
 
@@ -789,7 +789,7 @@ if (activeTab === 'gallery') {
     e.preventDefault();
     if (!newAlbumName) return alert('Enter album name');
     try {
-      const res = await fetch(`${API_BASE}/albums`, {
+      const res = await fetch(`${API_BASE}/albums/create-albums`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: newAlbumName })
@@ -798,7 +798,7 @@ if (activeTab === 'gallery') {
       if (!res.ok) throw new Error(data.error || data.message);
       alert('Album created');
       setNewAlbumName('');
-      const ref = await fetch(`${API_BASE}/albums`);
+      const ref = await fetch(`${API_BASE}/albums/get-albums`);
       const arr = await ref.json();
       setAlbumsList(arr || []);
       // notify gallery viewers to refresh
@@ -842,7 +842,7 @@ if (activeTab === 'gallery') {
     }
     alert(data.message || 'Photos uploaded');
     setGalleryFiles(null);
-    const ref = await fetch(`${API_BASE}/albums`);
+    const ref = await fetch(`${API_BASE}/albums/get-albums`);
     const arr = await ref.json();
     setAlbumsList(arr || []);
     try {
@@ -872,7 +872,7 @@ if (activeTab === 'gallery') {
   }
   try {
     const res = await fetch(
-      `${API_BASE}/albums/${albumId}`,
+      `${API_BASE}/albums/delete-albums/${albumId}`,
       {
         method: 'DELETE'
       }
@@ -882,7 +882,7 @@ if (activeTab === 'gallery') {
       throw new Error(data.error ||data.message ||'Delete failed');
     }
     alert(data.message ||'Album deleted');
-    const ref = await fetch(`${API_BASE}/albums`);
+    const ref = await fetch(`${API_BASE}/albums/get-albums`);
     const arr = await ref.json();
     setAlbumsList(arr || []);
     try {
@@ -910,7 +910,7 @@ if (activeTab === 'gallery') {
       throw new Error(data.error ||data.message ||'Delete photo failed');
     }
     alert(data.message ||'Photo deleted');
-    const ref = await fetch(`${API_BASE}/albums`);
+    const ref = await fetch(`${API_BASE}/albums/get-albums`);
     const arr = await ref.json();
     setAlbumsList(arr || []);
     try {
@@ -924,6 +924,8 @@ if (activeTab === 'gallery') {
 
   switch (selectedAction) {
     case 'add':
+      console.log("albumsList during render:", albumsList);
+      console.log("isArray during render:", Array.isArray(albumsList));
       return (
         <div className="form-card">
           <h3>Create Album / Upload</h3>
@@ -934,7 +936,7 @@ if (activeTab === 'gallery') {
 
           <div style={{ marginBottom: 12 }}>
             <label>Select album to upload (or create above):</label>
-            <select name="albumName" value={formData.albumName || ''} onChange={(e) => setFormData(prev => ({ ...prev, albumName: e.target.value }))}>
+            <select name="albumId" value={formData.albumId || ''} onChange={(e) => setFormData(prev => ({ ...prev, albumId: e.target.value }))}>
               <option value="">-- Select --</option>
               {albumsList.map((a) => (
                 <option key={a._id} value={a._id}>{a.name}</option>
@@ -955,7 +957,7 @@ if (activeTab === 'gallery') {
           <h3>Update Album (upload/delete photos)</h3>
           <div style={{ marginBottom: 12 }}>
             <label>Select album:</label>
-            <select name="albumName" value={formData.albumName || ''} onChange={(e) => setFormData(prev => ({ ...prev, albumName: e.target.value }))}>
+            <select name="albumId" value={formData.albumId || ''} onChange={(e) => setFormData(prev => ({ ...prev, albumId: e.target.value }))}>
               <option value="">-- Select --</option>
               {albumsList.map((a) => (
                 <option key={a._id} value={a._id}>{a.name}</option>
@@ -967,12 +969,12 @@ if (activeTab === 'gallery') {
             <input type="file" multiple accept="image/*" onChange={handleGalleryFileChange} />
             <button onClick={() => handleGalleryUpload(formData.albumId)} disabled={galleryUploading} style={{ marginLeft: 8 }}>{galleryUploading ? 'Uploading...' : 'Upload Photos'}</button>
           </div>
-
+              
           <div>
             <h4>Photos</h4>
-            {formData.albumName ? (
+            {formData.albumId ? (
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))', gap: 8 }}>
-                {(albumsList.find(a => a._id === formData.albumName)?.photos || []).map((p) => {
+                {(albumsList.find(a => a._id === formData.albumId)?.photos || []).map((p) => {
                   const src = p.url && p.url.startsWith('http') ? p.url : `${API_BASE}${p.url}`;
                   return (
                   <div key={p._id} style={{ position: 'relative' }}>
@@ -993,7 +995,7 @@ if (activeTab === 'gallery') {
           <h3>Delete Album</h3>
           <div style={{ marginBottom: 12 }}>
             <label>Select album to delete:</label>
-            <select name="albumName" value={formData.albumName || ''} onChange={(e) => setFormData(prev => ({ ...prev, albumName: e.target.value }))}>
+            <select name="albumId" value={formData.albumId || ''} onChange={(e) => setFormData(prev => ({ ...prev, albumId: e.target.value }))}>
               <option value="">-- Select --</option>
               {albumsList.map((a) => (
                 <option key={a._id} value={a._id}>{a.name}</option>
