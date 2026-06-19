@@ -924,8 +924,6 @@ if (activeTab === 'gallery') {
 
   switch (selectedAction) {
     case 'add':
-      console.log("albumsList during render:", albumsList);
-      console.log("isArray during render:", Array.isArray(albumsList));
       return (
         <div className="form-card">
           <h3>Create Album / Upload</h3>

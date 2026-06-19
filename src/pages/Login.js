@@ -77,6 +77,7 @@ const Login = () => {
           />
           <button type="submit">Login</button>
         </form>
+        <button onClick={()=>navigate('/')}>Back to home</button>
       </div>
     </div>
   );

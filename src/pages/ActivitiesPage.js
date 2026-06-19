@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import "./ActivitiesPage.css";
+import { API_BASE } from "../utils/api";
 
 const ActivitiesPage = () => {
   const [activities, setActivities] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [expandedCards, setExpandedCards] = useState({});
 
   useEffect(() => {
-    fetch("https://nss-website-backend.onrender.com/api/activities")
+    fetch(`${API_BASE}/activities/get-activities`)
       .then((res) => res.json())
       .then((data) => {
         setActivities(Array.isArray(data) ? data : []);
@@ -66,7 +68,7 @@ const ActivitiesPage = () => {
           <p>No activities available right now. Check back soon!</p>
         </div>
       ) : (
-        <div className="activities-grid" style={{ display: "grid", gridTemplateColumns: "1fr", gap: "20px", width: "100%" }}>
+        <div className="activities-grid" >
           {activities.map((activity, index) => (
             <article key={activity._id || index} className="activity-card">
 
@@ -98,8 +100,30 @@ const ActivitiesPage = () => {
               {/* BODY */}
               <div className="activity-body">
                 {activity.description && (
-                  <p className="activity-description">{activity.description}</p>
-                )}
+                      <>
+                        <p
+                          className={`activity-description ${
+                            !expandedCards[activity._id] ? "clamped" : ""
+                          }`}
+                        >
+                          {activity.description}
+                        </p>
+
+                        {activity.description.length > 200 && (
+                          <button
+                            className="read-more-btn"
+                            onClick={() =>
+                              setExpandedCards((prev) => ({
+                                ...prev,
+                                [activity._id]: !prev[activity._id],
+                              }))
+                            }
+                          >
+                            {expandedCards[activity._id] ? "Show Less" : "Read More"}
+                          </button>
+                        )}
+                      </>
+                    )}
 
                 {/* PHOTOS */}
                 {activity.photos?.length > 0 && (
@@ -109,7 +133,7 @@ const ActivitiesPage = () => {
                       {activity.photos.map((photo, i) => {
                         const imageUrl = photo.url?.startsWith("http")
                           ? photo.url
-                          : `https://nss-website-backend.onrender.com${photo.url}`;
+                          : `${API_BASE}${photo.url}`;
                         return (
                           <img
                             key={i}
@@ -134,9 +158,7 @@ const ActivitiesPage = () => {
                         <li key={i}>
                           <a
                             className="report-link"
-                            href={`https://nss-website-backend.onrender.com/download-report?url=${encodeURIComponent(
-                              report.url
-                            )}&filename=${encodeURIComponent(report.original_name)}`}
+                            href={`${API_BASE}/reports/download-report?url=${encodeURIComponent(report.url)}&filename=${encodeURIComponent(report.original_name)}&storage=${report.storage}`}
                             target="_blank"
                             rel="noopener noreferrer"
                           >

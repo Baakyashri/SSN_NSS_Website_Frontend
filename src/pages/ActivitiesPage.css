@@ -52,12 +52,7 @@
   margin: 0;
 }
 
-/* ── Grid — 1 wide column so cards expand horizontally ── */
-.activities-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 20px;
-}
+
 
 /* ── Card ── */
 .activity-card {
@@ -67,6 +62,7 @@
   box-shadow: var(--shadow-sm);
   overflow: hidden;
   transition: var(--transition);
+  height:100%;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -166,11 +162,26 @@
   min-width: 0;
 }
 
-.activity-description {
-  color: var(--text-mid);
-  font-size: 0.9rem;
-  line-height: 1.75;
-  margin: 0 0 4px;
+.activity-description.clamped {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.read-more-btn {
+  margin-top: 8px;
+  background: none;
+  border: none;
+  color: var(--primary-light);
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  align-self: flex-start;
+}
+
+.read-more-btn:hover {
+  text-decoration: underline;
 }
 
 /* ── Sections (Photos / Reports) ── */
@@ -191,14 +202,15 @@
 
 /* ── Photos ── */
 .photos-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
 }
 
 .activity-photo {
-  width: 76px;
-  height: 76px;
+  width: 100%;
+  aspect-ratio:1;
+  height: auto;
   object-fit: cover;
   border-radius: var(--radius-sm);
   border: 1.5px solid var(--border);
@@ -250,7 +262,7 @@
 .report-icon { font-size: 1rem; flex-shrink: 0; }
 
 .report-name {
-  flex: 1;
+  max-width:140px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -340,4 +352,16 @@
   .page-hero { margin-bottom: 28px; }
 
   .activity-header { padding: 18px 20px 20px; }
+}
+
+@media (max-width: 1200px) {
+  .activities-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .activities-grid {
+    grid-template-columns: 1fr;
+  }
 }
