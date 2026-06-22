@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import "./ClubsPage.css";
-import MainLayout from "./MainLayout";
+import MainLayout from "../components/MainLayout";
 
 /* ============================
    CLUBS DATA

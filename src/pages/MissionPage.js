@@ -1,6 +1,6 @@
 import './MissionPage.css'; 
 import missionPhoto from '../assets/mission_photo.png';
-import MainLayout from './MainLayout';
+import MainLayout from '../components/MainLayout';
 
 const MissionPage = () => {
 

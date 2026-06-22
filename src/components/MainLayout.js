@@ -133,6 +133,8 @@ const MainLayout = ({ children }) => {
 
       {/* ===== PAGE CONTENT ===== */}
       <main>{children}</main>
+
+      
     </>
   );
 };

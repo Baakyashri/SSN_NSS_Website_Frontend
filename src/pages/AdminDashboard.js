@@ -15,6 +15,7 @@ const AdminDashboard = () => {
   const [galleryUploading, setGalleryUploading] = useState(false);
   const [newAlbumName, setNewAlbumName] = useState('');
 
+  
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -312,6 +313,8 @@ const handleDeleteUser = async (e) => {
               date: formData.date,
               location:formData.location,
               status:formData.status,
+              attendance_hours:formData.attendance_hours,
+              no_of_volunteers:formData.no_of_volunteers,
               photos: uploadedPhotos,
               reports: uploadedReports
             };
@@ -350,6 +353,10 @@ const handleDeleteUser = async (e) => {
           <input id="location" name="location" type="text" placeholder="Activity Location" value={formData.location || ''} onChange={handleChange} required />
           <label htmlFor="status">Status:</label>
           <input id="status" name="status" type="text" placeholder="Activity Status(upcoming/completed)" value={formData.status || ''} onChange={handleChange} required />
+          <label htmlFor="attendance_hours">Attendance Hours:</label>
+          <input id="attendance_hours" name="attendance_hours" type="text" placeholder="Activity attendance hours" value={formData.attendance_hours || ''} onChange={handleChange}  />
+          <label htmlFor="no_of_voulnteers">No. of Volunteers:</label>
+          <input id="no_of_voulnteers" name="no_of_voulnteers" type="text" placeholder="No. of Voulnteers participated in the activity" value={formData.no_of_volunteers || ''} onChange={handleChange}  />
           <div className="photo-section">
             <h4>Upload Activity Photos</h4>
             <label htmlFor="photos">Photos:</label>
@@ -546,6 +553,8 @@ const handleDeleteUser = async (e) => {
               newDate: formData.newDate,
               newLocation:formData.newLocation,
               newStatus:formData.newStatus,
+              newAttendanceHours:formData.newAttendanceHours,
+              newNoOfVolunteers:formData.newNoOfVolunteers,
               newPhotos: uploadedPhotos,
               newReports: uploadedReports
             };
@@ -586,6 +595,10 @@ const handleDeleteUser = async (e) => {
           <input id="newlLocation" name="newLocation" type="text" placeholder="New Location" value={formData.newLocation || ''} onChange={handleChange} required />
           <label htmlFor="newStatus">New Status:</label>
           <input id="newStatus" name="newStatus" type="text" placeholder="New Status(upcoming/completed)" value={formData.newStatus || ''} onChange={handleChange} required />
+          <label htmlFor="newAttendanceHours">New Attendance Hours:</label>
+          <input id="newAttendanceHours" name="newAttendanceHours" type="text" placeholder="New Attendance Hours" value={formData.newAttendanceHours || ''} onChange={handleChange} />
+          <label htmlFor="newNoOfVolunteers">New No. Of Volunteers:</label>
+          <input id="new" name="newNoOfVolunteers" type="text" placeholder="New No. Of volunteers" value={formData.newNoOfVolunteers || ''} onChange={handleChange}  />
           <div className="photo-section">
             <h4>Upload New Activity Photos (optional)</h4>
             <div className="upload-section">

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Home.css';
 import { Link } from 'react-router-dom';
-import MainLayout from './MainLayout';
+import MainLayout from '../components/MainLayout';
 
 /* Load Google Font once */
 const fontLink = document.createElement('link');
@@ -100,26 +100,26 @@ const Home = () => {
         <Link to="/collaborators" className="read-more">Meet Our Partners →</Link>
       </section>
 
-      {/* FOOTER */}
+                    {/* FOOTER */}
       <div className="footer-social">
         <h3>Follow Us</h3>
-<div className="floating-social">
-<a href="https://www.youtube.com/@nssofssn" target="_blank" rel="noreferrer">
-<img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="YouTube"/>
-</a>
-<a href="https://instagram.com/nssofssn" target="_blank" rel="noreferrer">
-<img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram"/>
-</a>
-<a href="https://www.facebook.com/nssofssn" target="_blank" rel="noreferrer">
-<img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook"/>
-</a>
-<a href="https://x.com/SSNNSS579516641" target="_blank" rel="noreferrer">
-<img src="https://cdn-icons-png.flaticon.com/512/5968/5968958.png" alt="Twitter"/>
-</a>
-<a href="https://www.linkedin.com/company/nssssn/" target="_blank" rel="noreferrer">
-<img src="https://cdn-icons-png.flaticon.com/512/3536/3536505.png" alt="LinkedIn"/>
-</a>
-</div>
+        <div className="floating-social">
+        <a href="https://www.youtube.com/@nssofssn" target="_blank" rel="noreferrer">
+        <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="YouTube"/>
+        </a>
+        <a href="https://instagram.com/nssofssn" target="_blank" rel="noreferrer">
+        <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram"/>
+        </a>
+        <a href="https://www.facebook.com/nssofssn" target="_blank" rel="noreferrer">
+        <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook"/>
+        </a>
+        <a href="https://x.com/SSNNSS579516641" target="_blank" rel="noreferrer">
+        <img src="https://cdn-icons-png.flaticon.com/512/5968/5968958.png" alt="Twitter"/>
+        </a>
+        <a href="https://www.linkedin.com/company/nssssn/" target="_blank" rel="noreferrer">
+        <img src="https://cdn-icons-png.flaticon.com/512/3536/3536505.png" alt="LinkedIn"/>
+        </a>
+        </div>
       </div>
 
     </MainLayout>

@@ -15,6 +15,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import Gallery from "./pages/Gallery";
 import ActivitiesPage from "./pages/ActivitiesPage";
 import ClubsPage from "./pages/ClubsPage";
+import FloatingChatbot from './components/chatbot/FloatingChatbot';
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
       </Routes>
+      <FloatingChatbot />
     </Router>
   );
 }

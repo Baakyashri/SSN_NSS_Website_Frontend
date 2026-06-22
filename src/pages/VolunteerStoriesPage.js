@@ -1,5 +1,5 @@
 import './VolunteerStoriesPage.css';
-import MainLayout from './MainLayout';
+import MainLayout from '../components/MainLayout';
 
 const VolunteerStoriesPage = () => {
   return (

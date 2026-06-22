@@ -1,5 +1,5 @@
 import './InitiativesPage.css';
-import MainLayout from './MainLayout';
+import MainLayout from '../components/MainLayout';
 
 const InitiativesPage = () => {
   return (

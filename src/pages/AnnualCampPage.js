@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import './AnnualCampPage.css';
-import MainLayout from './MainLayout';
+import MainLayout from '../components/MainLayout';
 import camp2026_day1 from '../assets/camp-gallery/Day-1.jpg';
 import camp2026_day2 from '../assets/camp-gallery/Day-2.jpg';
 import camp2026_day3 from '../assets/camp-gallery/Day-3.jpg';

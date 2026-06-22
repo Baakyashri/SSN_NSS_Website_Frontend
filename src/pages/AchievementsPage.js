@@ -1,5 +1,5 @@
 import './AchievementsPage.css';
-import MainLayout from './MainLayout';
+import MainLayout from '../components/MainLayout';
 // Import your images
 import bestUnitAward from '../assets/achievements/best_unit_award.png';
 import youthFestival from '../assets/achievements/youth_festival_noida.png';

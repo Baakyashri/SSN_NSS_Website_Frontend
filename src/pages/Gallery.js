@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./Gallery.css";
 import { API_BASE } from "../utils/api";
-import MainLayout from './MainLayout';
+import MainLayout from '../components/MainLayout';
 
 const Gallery = () => {
   // ===== STATE DECLARATIONS =====

@@ -1,5 +1,5 @@
 import './AnnualReportPage.css';
-import MainLayout from './MainLayout';
+import MainLayout from '../components/MainLayout';
 
 const AnnualReportPage = () => {
   return (
