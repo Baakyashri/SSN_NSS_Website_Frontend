@@ -11,7 +11,7 @@ import AnnualReportPage from "./pages/AnnualReportPage";
 import CollaboratorsPage from "./pages/CollaboratorsPage";
 import ContactUsPage from "./pages/ContactUsPage";
 import Login from "./pages/Login";
-import AdminDashboard from "./pages/AdminDashboard";
+import AdminDashboard from "./admin/AdminDashboard";
 import Gallery from "./pages/Gallery";
 import ActivitiesPage from "./pages/ActivitiesPage";
 import ClubsPage from "./pages/ClubsPage";
