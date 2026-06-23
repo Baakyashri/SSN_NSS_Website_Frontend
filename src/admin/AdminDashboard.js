@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import './AdminDashboard.css';
+import './styles/AdminLayout.css';
+import './styles/Sidebar.css';
+import './styles/ActionButtons.css';
+import './styles/Forms.css';
+import './styles/Tables.css';
+import './styles/Modals.css';
+import './styles/DashboardUtilities.css';
 import { API_BASE } from '../utils/api';
 import { useNavigate } from "react-router-dom";
 import { getAuthHeaders, getAuthHeadersForFormData, isAuthenticated, logout } from '../utils/auth';
@@ -11,12 +17,15 @@ import ActivitiesTab from './tabs/ActivitiesTab';
 import GalleryTab from './tabs/GalleryTab';
 import RegistrationsTab from './tabs/RegistrationsTab';
 import AnnouncementsTab from './tabs/AnnouncementsTab';
+import AttendanceTab from './tabs/AttendanceTab';
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('members');
   const [selectedAction, setSelectedAction] = useState('');
   const [formData, setFormData] = useState({});
   const [membersList, setMembersList] = useState([]);
+  const registrationActions = ['add','view'];
+  const attendanceActions = ['view'];
 
   const navigate = useNavigate();
 
@@ -40,6 +49,9 @@ const AdminDashboard = () => {
     // Explicitly fetch members when View is clicked
     if (activeTab === 'members' && action === 'view') {
       fetchMembers();
+    }
+    if (activeTab === 'attendance') {
+        return ['view'];
     }
   };
 
@@ -206,6 +218,12 @@ const AdminDashboard = () => {
             selectedAction={selectedAction}
           />
         );
+      case 'attendance':
+        return (
+          <AttendanceTab
+            selectedAction={selectedAction}
+          />
+        );
       default:
         return <p className="placeholder-text">Select an action to proceed.</p>;
     }
@@ -223,6 +241,7 @@ const AdminDashboard = () => {
       <main className="main-content">
         <>
           <ActionButtons
+            activeTab={activeTab}
             selectedAction={selectedAction}
             handleActionClick={handleActionClick}
           />

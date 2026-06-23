@@ -50,6 +50,15 @@ const Sidebar = ({ activeTab, setActiveTab, setSelectedAction, handleLogout }) =
         >
           Announcements
         </li>
+         <li
+          className={activeTab === 'attendance' ? 'active' : ''}
+          onClick={() => {
+            setActiveTab('attendance');
+            setSelectedAction('');
+          }}
+        >
+          Attendance
+        </li>
         <li onClick={handleLogout}>
           Logout
         </li>
