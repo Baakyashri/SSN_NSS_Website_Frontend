@@ -20,15 +20,19 @@ const RegistrationsTab = ({ selectedAction }) => {
       })
         .then((res) => res.json())
         .then((data) => {
+          console.log("USERS DATA:", data);
           setUsers(data || []);
         })
         .catch(console.error);
-
-      fetch(`${API_BASE}/activities/get-activities`, {
+        
+      fetch(`${API_BASE}/activities/get-upcoming-activities`, {
         headers: getAuthHeaders()
       })
         .then((res) => res.json())
-        .then((data) => setActivities(data || []))
+        .then((data) => {
+          console.log("ACTIVITIES:", data);
+          console.log("First Activity:", JSON.stringify(activities[0], null, 2));
+          setActivities(data || []);})
         .catch(console.error);
     }
   }, [selectedAction]);
@@ -108,6 +112,7 @@ const RegistrationsTab = ({ selectedAction }) => {
               : reg
           )
         );
+        alert('Registration marked as attended!')
       }
     } catch (err) {
       console.error(err);
@@ -217,6 +222,7 @@ const RegistrationsTab = ({ selectedAction }) => {
               }))
             }
           >
+          
             <option value="">-- Select Activity --</option>
             {activities.map((activity) => (
               <option key={activity._id} value={activity._id}>
